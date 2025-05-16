@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller Guiado: Solución Paso a Paso de Ecuaciones</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            svg: {
+                fontCache: 'global'
+            },
+            options: {
+                enableMenu: false,
+                renderActions: {
+                    addMenu: [], 
+                    checkLoading: []
+                }
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        console.log('MathJax initial typesetting complete');
+                    });
+                }
+            }
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+        .equation-box {
+            border-left: 4px solid #3b82f6;
+            padding-left: 16px;
+            margin-bottom: 16px;
+        }
+        .step {
+            padding: 12px;
+            margin-bottom: 12px;
+            background-color: #f9fafb;
+            border-radius: 8px;
+        }
+        .concept {
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+        .solution {
+            font-weight: 600;
+            color: #047857;
+            margin-top: 12px;
+        }
+        .math-display {
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        .equation-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #1e40af;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .restriction {
+            color: #b91c1c;
+            font-style: italic;
+            margin: 8px 0;
+        }
+        .verification {
+            margin-top: 8px;
+            color: #4b5563;
+            font-style: italic;
+        }
+        
+        /* Para mejorar la visualización de MathJax */
+        .MathJax {
+            font-size: 115% !important;
+        }
+        
+        .index-item {
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .index-item:hover {
+            background-color: #e5e7eb;
+        }
+        
+        .active-equation {
+            background-color: #dbeafe;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .toc-container {
+            max-height: none;
+            overflow-y: visible;
+        }
+        
+        @media print {
+            html, body {
+                width: 100%;
+                height: auto;
+                overflow: visible;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            .equation-container {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            
+            .step {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Taller Guiado: Solución Paso a Paso de Ecuaciones</h1>
+            <p class="text-lg text-gray-600">Resolución detallada de ecuaciones con explicación de cada paso</p>
+        </header>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Introducción</h2>
+            <p class="mb-4">Este taller interactivo presenta la solución detallada de diferentes tipos de ecuaciones, desde ecuaciones lineales con fracciones hasta ecuaciones con radicales y potencias. Cada solución incluye una explicación clara del concepto matemático utilizado en cada paso.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <!-- Índice de Ecuaciones -->
+            <div class="md:col-span-4 lg:col-span-3 bg-white p-5 rounded-lg shadow toc-container">
+                <h2 class="text-xl font-semibold mb-4 border-b pb-2">Índice de Ecuaciones</h2>
+                <div id="equation-list" class="space-y-2">
+                    <div class="index-item" onclick="showEquation(1)">
+                        <p>1. $\frac{2}{3}x+\frac{4}{3}=x -\frac{1}{3}$</p>
+                    </div>
+                    <div class="index-item" onclick="showEquation(2)">
+                        <p>2. $4(1-x)=x-3(x+1)$</p>
+                    </div>
+                    <div class="index-item" onclick="showEquation(3)">
+                        <p>3. $\frac{4}{r+1}-5=4-\frac{3}{r+1}$</p>
+                    </div>
+                    <div class="index-item" onclick="showEquation(4)">
+                        <p>4. $x(2x-1)=3$</p>
+                    </div>
+                    <div class="index-item" onclick="showEquation(5)">
+                        <p>5. $0=x^{\frac{1}{4}}-2x^{\frac{1}{2}}+1$</p>
+                    </div>
+                    <div class="index-item" onclick="showEquation(6)">
+                        <p>6. $3+\sqrt{3x+1}=x$</p>
+                    </div>
+                    <div class="index-item" onclick="showEquation(7)">
+                        <p>7. $\sqrt[3]{x^{2}+17}=4$</p>
+                    </div>
+                    <div class="index-item" onclick="showEquation(8)">
+                        <p>8. $\sqrt{x+2}-\sqrt{x-3}=\sqrt{x-6}$</p>
+                    </div>
+                    <div class="index-item" onclick="showEquation(9)">
+                        <p>9. $x+3-28x^{-1}=0$</p>
+                    </div>
+                    <div class="index-item" onclick="showEquation(10)">
+                        <p>10. $\frac{1}{\sqrt{x}}+\sqrt{x}=\frac{5}{\sqrt{x}}-2\sqrt{x}$</p>
+                    </div>
+                    <div class="index-item" onclick="showEquation(11)">
+                        <p>11. $\frac{2}{5}+\frac{4}{10x+5}=\frac{7}{2x+1}$</p>
+                    </div>
+                    <div class="index-item" onclick="showEquation(12)">
+                        <p>12. $\frac{3x+1}{6x-2}=\frac{2x+5}{4x-13}$</p>
+                    </div>
+                    <div class="index-item" onclick="showEquation(13)">
+                        <p>13. $\frac{2x-9}{4}=2+\frac{x}{12}$</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenido de las Ecuaciones -->
+            <div class="md:col-span-8 lg:col-span-9 bg-white p-6 rounded-lg shadow">
+                <!-- Ecuación 1 -->
+                <div id="equation-1" class="equation-container">
+                    <h3 class="equation-title">Ecuación 1: $\frac{2}{3}x+\frac{4}{3}=x -\frac{1}{3}$</h3>
+                    <div class="equation-box">
+                        <div class="step">
+                            <p class="concept">Ecuación original:</p>
+                            <div class="math-display">
+
+                                $$\frac{2}{3}x+\frac{4}{3}=x -\frac{1}{3}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Multiplicar toda la ecuación por el mínimo común múltiplo de los denominadores (que es 3) para eliminar las fracciones.</p>
+                            <div class="math-display">
+
+                                $$3 \times \left(\frac{2}{3}x+\frac{4}{3}\right) = 3 \times \left(x -\frac{1}{3}\right)$$
+
+                                $$2x + 4 = 3x - 1$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Restar $2x$ de ambos lados para agrupar los términos con $x$.</p>
+                            <div class="math-display">
+
+                                $$2x + 4 - 2x = 3x - 1 - 2x$$
+
+                                $$4 = x - 1$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Sumar 1 a ambos lados para aislar $x$.</p>
+                            <div class="math-display">
+
+                                $$4 + 1 = x - 1 + 1$$
+
+                                $$5 = x$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="solution">Solución: $x = 5$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ecuación 2 -->
+                <div id="equation-2" class="equation-container hidden">
+                    <h3 class="equation-title">Ecuación 2: $4(1-x)=x-3(x+1)$</h3>
+                    <div class="equation-box">
+                        <div class="step">
+                            <p class="concept">Ecuación original:</p>
+                            <div class="math-display">
+
+                                $$4(1-x)=x-3(x+1)$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Distribuir en ambos lados de la ecuación.</p>
+                            <div class="math-display">
+
+                                $$4 - 4x = x - 3x - 3$$
+
+                                $$4 - 4x = -2x - 3$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Sumar $4x$ a ambos lados para agrupar los términos con $x$.</p>
+                            <div class="math-display">
+
+                                $$4 - 4x + 4x = -2x - 3 + 4x$$
+
+                                $$4 = 2x - 3$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Sumar 3 a ambos lados para aislar el término con $x$.</p>
+                            <div class="math-display">
+
+                                $$4 + 3 = 2x - 3 + 3$$
+
+                                $$7 = 2x$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Dividir ambos lados por 2 para despejar $x$.</p>
+                            <div class="math-display">
+
+                                $$\frac{7}{2} = \frac{2x}{2}$$
+
+                                $$\frac{7}{2} = x$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="solution">Solución: $x = \frac{7}{2}$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ecuación 3 -->
+                <div id="equation-3" class="equation-container hidden">
+                    <h3 class="equation-title">Ecuación 3: $\frac{4}{r+1}-5=4-\frac{3}{r+1}$</h3>
+                    <div class="equation-box">
+                        <div class="step">
+                            <p class="concept">Ecuación original:</p>
+                            <div class="math-display">
+
+                                $$\frac{4}{r+1}-5=4-\frac{3}{r+1}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="restriction">Restricción: $r+1 \neq 0 \implies r \neq -1$.</p>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Sumar $\frac{3}{r+1}$ a ambos lados para agrupar los términos con el mismo denominador.</p>
+                            <div class="math-display">
+
+                                $$\frac{4}{r+1} - 5 + \frac{3}{r+1} = 4 - \frac{3}{r+1} + \frac{3}{r+1}$$
+
+                                $$\frac{4+3}{r+1} - 5 = 4$$
+
+                                $$\frac{7}{r+1} - 5 = 4$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Sumar 5 a ambos lados.</p>
+                            <div class="math-display">
+
+                                $$\frac{7}{r+1} - 5 + 5 = 4 + 5$$
+
+                                $$\frac{7}{r+1} = 9$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Multiplicar ambos lados por $(r+1)$.</p>
+                            <div class="math-display">
+
+                                $$(r+1) \times \frac{7}{r+1} = 9 \times (r+1)$$
+
+                                $$7 = 9r + 9$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Restar 9 de ambos lados.</p>
+                            <div class="math-display">
+
+                                $$7 - 9 = 9r + 9 - 9$$
+
+                                $$-2 = 9r$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Dividir ambos lados por 9 para despejar $r$.</p>
+                            <div class="math-display">
+
+                                $$\frac{-2}{9} = \frac{9r}{9}$$
+
+                                $$-\frac{2}{9} = r$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Verificar la solución en la restricción.</p>
+                            <p class="verification">$r = -\frac{2}{9} \neq -1$, por lo que la solución es válida.</p>
+                        </div>
+                        <div class="step">
+                            <p class="solution">Solución: $r = -\frac{2}{9}$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ecuación 4 -->
+                <div id="equation-4" class="equation-container hidden">
+                    <h3 class="equation-title">Ecuación 4: $x(2x-1)=3$</h3>
+                    <div class="equation-box">
+                        <div class="step">
+                            <p class="concept">Ecuación original:</p>
+                            <div class="math-display">
+
+                                $$x(2x-1)=3$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Distribuir en el lado izquierdo.</p>
+                            <div class="math-display">
+
+                                $$2x^2 - x = 3$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Reorganizar la ecuación para formar una ecuación cuadrática de la forma $ax^2+bx+c=0$.</p>
+                            <div class="math-display">
+
+                                $$2x^2 - x - 3 = 0$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Utilizar la fórmula general para resolver la ecuación cuadrática, donde $a=2$, $b=-1$, $c=-3$.</p>
+                            <div class="math-display">
+
+                                $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+
+                                $$x = \frac{-(-1) \pm \sqrt{(-1)^2 - 4(2)(-3)}}{2(2)}$$
+
+                                $$x = \frac{1 \pm \sqrt{1 + 24}}{4}$$
+
+                                $$x = \frac{1 \pm \sqrt{25}}{4}$$
+
+                                $$x = \frac{1 \pm 5}{4}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Calcular las dos posibles soluciones.</p>
+                            <div class="math-display">
+
+                                $$x_1 = \frac{1 + 5}{4} = \frac{6}{4} = \frac{3}{2}$$
+
+                                $$x_2 = \frac{1 - 5}{4} = \frac{-4}{4} = -1$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="solution">Soluciones: $x = \frac{3}{2}$ o $x = -1$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ecuación 5 -->
+                <div id="equation-5" class="equation-container hidden">
+                    <h3 class="equation-title">Ecuación 5: $0=x^{\frac{1}{4}}-2x^{\frac{1}{2}}+1$</h3>
+                    <div class="equation-box">
+                        <div class="step">
+                            <p class="concept">Ecuación original:</p>
+                            <div class="math-display">
+
+                                $$0=x^{\frac{1}{4}}-2x^{\frac{1}{2}}+1$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Reconocer que esta es una ecuación con potencias fraccionarias que se puede resolver haciendo una sustitución. Sea $u = x^{1/4}$. Entonces $u^2 = (x^{1/4})^2 = x^{2/4} = x^{1/2}$.</p>
+                            <div class="math-display">
+
+                                $$0 = u - 2u^2 + 1$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Reorganizar la ecuación en forma estándar para una ecuación cuadrática en términos de $u$.</p>
+                            <div class="math-display">
+
+                                $$2u^2 - u - 1 = 0$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Factorizar el trinomio cuadrado. Buscamos dos números que multiplicados den $2 \times -1 = -2$ y sumados den $-1$. Los números son $-2$ y $1$.</p>
+                            <div class="math-display">
+
+                                $$2u^2 - 2u + u - 1 = 0$$
+
+                                $$2u(u - 1) + 1(u - 1) = 0$$
+
+                                $$(2u + 1)(u - 1) = 0$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Establecer cada factor igual a cero y resolver para $u$.</p>
+                            <div class="math-display">
+
+                                $$2u + 1 = 0 \implies 2u = -1 \implies u = -\frac{1}{2}$$
+
+                                $$u - 1 = 0 \implies u = 1$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Sustituir de vuelta $u = x^{1/4}$ y resolver para $x$.</p>
+                            <div class="math-display">
+
+                                $$x^{1/4} = -\frac{1}{2}$$
+                            </div>
+                            <p class="verification">No hay solución real para esta ecuación, ya que la raíz cuarta de un número real no puede ser negativa.</p>
+                            <div class="math-display">
+
+                                $$x^{1/4} = 1$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Elevar ambos lados a la potencia de 4.</p>
+                            <div class="math-display">
+
+                                $$(x^{1/4})^4 = 1^4$$
+
+                                $$x = 1$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Verificar la solución en la ecuación original.</p>
+                            <p class="verification">Para $x=1$: $0 = 1^{1/4} - 2(1^{1/2}) + 1 = 1 - 2(1) + 1 = 1 - 2 + 1 = 0$. La solución es válida.</p>
+                        </div>
+                        <div class="step">
+                            <p class="solution">Solución: $x = 1$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ecuación 6 -->
+                <div id="equation-6" class="equation-container hidden">
+                    <h3 class="equation-title">Ecuación 6: $3+\sqrt{3x+1}=x$</h3>
+                    <div class="equation-box">
+                        <div class="step">
+                            <p class="concept">Ecuación original:</p>
+                            <div class="math-display">
+
+                                $$3+\sqrt{3x+1}=x$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="restriction">Restricción: El radicando debe ser no negativo: $3x+1 \geq 0 \implies 3x \geq -1 \implies x \geq -\frac{1}{3}$.</p>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Aislar el término con la raíz cuadrada restando 3 de ambos lados.</p>
+                            <div class="math-display">
+
+                                $$\sqrt{3x+1} = x - 3$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="restriction">Restricción implícita: El lado derecho debe ser no negativo para que sea igual a una raíz cuadrada principal: $x-3 \geq 0 \implies x \geq 3$. Combinando las restricciones, debemos tener $x \geq 3$.</p>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Elevar ambos lados al cuadrado para eliminar la raíz cuadrada.</p>
+                            <div class="math-display">
+
+                                $$(\sqrt{3x+1})^2 = (x - 3)^2$$
+
+                                $$3x + 1 = x^2 - 6x + 9$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Reorganizar la ecuación para formar una ecuación cuadrática.</p>
+                            <div class="math-display">
+
+                                $$0 = x^2 - 6x + 9 - 3x - 1$$
+
+                                $$0 = x^2 - 9x + 8$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Factorizar el trinomio cuadrado. Buscamos dos números que multiplicados den 8 y sumados den -9. Los números son -1 y -8.</p>
+                            <div class="math-display">
+
+                                $$0 = (x - 1)(x - 8)$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Establecer cada factor igual a cero y resolver para $x$.</p>
+                            <div class="math-display">
+
+                                $$x - 1 = 0 \implies x = 1$$
+
+                                $$x - 8 = 0 \implies x = 8$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Verificar las soluciones en la ecuación original y en la restricción $x \geq 3$.</p>
+                            <p class="verification">Para $x=1$: Restricción $1 \geq 3$ es falsa. Además, $3+\sqrt{3(1)+1} = 3+\sqrt{4} = 3+2 = 5$. Lado derecho es 1. $5 \neq 1$. $x=1$ es una solución extraña.</p>
+                            <p class="verification">Para $x=8$: Restricción $8 \geq 3$ es verdadera. $3+\sqrt{3(8)+1} = 3+\sqrt{24+1} = 3+\sqrt{25} = 3+5 = 8$. Lado derecho es 8. $8 = 8$. $x=8$ es una solución válida.</p>
+                        </div>
+                        <div class="step">
+                            <p class="solution">Solución: $x = 8$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ecuación 7 -->
+                <div id="equation-7" class="equation-container hidden">
+                    <h3 class="equation-title">Ecuación 7: $\sqrt[3]{x^{2}+17}=4$</h3>
+                    <div class="equation-box">
+                        <div class="step">
+                            <p class="concept">Ecuación original:</p>
+                            <div class="math-display">
+
+                                $$\sqrt[3]{x^{2}+17}=4$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Elevar ambos lados al cubo para eliminar la raíz cúbica.</p>
+                            <div class="math-display">
+
+                                $$(\sqrt[3]{x^{2}+17})^3 = 4^3$$
+
+                                $$x^{2}+17 = 64$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Restar 17 de ambos lados.</p>
+                            <div class="math-display">
+
+                                $$x^{2}+17 - 17 = 64 - 17$$
+
+                                $$x^2 = 47$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Tomar la raíz cuadrada de ambos lados.</p>
+                            <div class="math-display">
+
+                                $$\sqrt{x^2} = \pm\sqrt{47}$$
+
+                                $$x = \pm\sqrt{47}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Verificar las soluciones en la ecuación original.</p>
+                            <p class="verification">Para $x=\sqrt{47}$: $\sqrt[3]{(\sqrt{47})^{2}+17} = \sqrt[3]{47+17} = \sqrt[3]{64} = 4$. Válida.</p>
+                            <p class="verification">Para $x=-\sqrt{47}$: $\sqrt[3]{(-\sqrt{47})^{2}+17} = \sqrt[3]{47+17} = \sqrt[3]{64} = 4$. Válida.</p>
+                        </div>
+                        <div class="step">
+                            <p class="solution">Soluciones: $x = \sqrt{47}$ o $x = -\sqrt{47}$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ecuación 8 -->
+                <div id="equation-8" class="equation-container hidden">
+                    <h3 class="equation-title">Ecuación 8: $\sqrt{x+2}-\sqrt{x-3}=\sqrt{x-6}$</h3>
+                    <div class="equation-box">
+                        <div class="step">
+                            <p class="concept">Ecuación original:</p>
+                            <div class="math-display">
+
+                                $$\sqrt{x+2}-\sqrt{x-3}=\sqrt{x-6}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="restriction">Restricciones: Los radicandos deben ser no negativos: $x+2 \geq 0 \implies x \geq -2$, $x-3 \geq 0 \implies x \geq 3$, $x-6 \geq 0 \implies x \geq 6$. La restricción combinada es $x \geq 6$.</p>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Elevar ambos lados al cuadrado. (Esto puede introducir soluciones extrañas).</p>
+                            <div class="math-display">
+
+                                $$(\sqrt{x+2}-\sqrt{x-3})^2 = (\sqrt{x-6})^2$$
+
+                                $$(\sqrt{x+2})^2 - 2\sqrt{x+2}\sqrt{x-3} + (\sqrt{x-3})^2 = x-6$$
+
+                                $$(x+2) - 2\sqrt{(x+2)(x-3)} + (x-3) = x-6$$
+
+                                $$x+2 - 2\sqrt{x^2 - x - 6} + x - 3 = x - 6$$
+
+                                $$2x - 1 - 2\sqrt{x^2 - x - 6} = x - 6$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Aislar el término con la raíz cuadrada.</p>
+                            <div class="math-display">
+
+                                $$-2\sqrt{x^2 - x - 6} = x - 6 - 2x + 1$$
+
+                                $$-2\sqrt{x^2 - x - 6} = -x - 5$$
+
+                                $$2\sqrt{x^2 - x - 6} = x + 5$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="restriction">Restricción implícita: El lado derecho debe ser no negativo: $x+5 \geq 0 \implies x \geq -5$. Esto no cambia la restricción principal de $x \geq 6$.</p>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Elevar ambos lados al cuadrado nuevamente.</p>
+                            <div class="math-display">
+
+                                $$(2\sqrt{x^2 - x - 6})^2 = (x + 5)^2$$
+
+                                $$4(x^2 - x - 6) = x^2 + 10x + 25$$
+
+                                $$4x^2 - 4x - 24 = x^2 + 10x + 25$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Reorganizar la ecuación para formar una ecuación cuadrática.</p>
+                            <div class="math-display">
+
+                                $$4x^2 - x^2 - 4x - 10x - 24 - 25 = 0$$
+
+                                $$3x^2 - 14x - 49 = 0$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Utilizar la fórmula general para resolver la ecuación cuadrática, donde $a=3$, $b=-14$, $c=-49$.</p>
+                            <div class="math-display">
+
+                                $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+
+                                $$x = \frac{-(-14) \pm \sqrt{(-14)^2 - 4(3)(-49)}}{2(3)}$$
+
+                                $$x = \frac{14 \pm \sqrt{196 + 588}}{6}$$
+
+                                $$x = \frac{14 \pm \sqrt{784}}{6}$$
+
+                                $$x = \frac{14 \pm 28}{6}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Calcular las dos posibles soluciones.</p>
+                            <div class="math-display">
+
+                                $$x_1 = \frac{14 + 28}{6} = \frac{42}{6} = 7$$
+
+                                $$x_2 = \frac{14 - 28}{6} = \frac{-14}{6} = -\frac{7}{3}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Verificar las soluciones en la ecuación original y en la restricción $x \geq 6$.</p>
+                            <p class="verification">Para $x=7$: Restricción $7 \geq 6$ es verdadera. $\sqrt{7+2}-\sqrt{7-3} = \sqrt{9}-\sqrt{4} = 3-2 = 1$. $\sqrt{7-6} = \sqrt{1} = 1$. $1 = 1$. $x=7$ es una solución válida.</p>
+                            <p class="verification">Para $x=-\frac{7}{3}$: Restricción $-\frac{7}{3} \geq 6$ es falsa. $x=-\frac{7}{3}$ es una solución extraña.</p>
+                        </div>
+                        <div class="step">
+                            <p class="solution">Solución: $x = 7$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ecuación 9 -->
+                <div id="equation-9" class="equation-container hidden">
+                    <h3 class="equation-title">Ecuación 9: $x+3-28x^{-1}=0$</h3>
+                    <div class="equation-box">
+                        <div class="step">
+                            <p class="concept">Ecuación original:</p>
+                            <div class="math-display">
+
+                                $$x+3-28x^{-1}=0$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Reescribir el término con exponente negativo como una fracción.</p>
+                            <div class="math-display">
+
+                                $$x + 3 - \frac{28}{x} = 0$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="restriction">Restricción: $x \neq 0$.</p>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Multiplicar toda la ecuación por $x$ para eliminar la fracción.</p>
+                            <div class="math-display">
+
+                                $$x\left(x + 3 - \frac{28}{x}\right) = x(0)$$
+
+                                $$x^2 + 3x - 28 = 0$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Factorizar el trinomio cuadrado. Buscamos dos números que multiplicados den -28 y sumados den 3. Los números son 7 y -4.</p>
+                            <div class="math-display">
+
+                                $$(x + 7)(x - 4) = 0$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Establecer cada factor igual a cero y resolver para $x$.</p>
+                            <div class="math-display">
+
+                                $$x + 7 = 0 \implies x = -7$$
+
+                                $$x - 4 = 0 \implies x = 4$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Verificar las soluciones en la restricción.</p>
+                            <p class="verification">Ambas soluciones son diferentes de 0.</p>
+                        </div>
+                        <div class="step">
+                            <p class="solution">Soluciones: $x = -7$ o $x = 4$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ecuación 10 -->
+                <div id="equation-10" class="equation-container hidden">
+                    <h3 class="equation-title">Ecuación 10: $\frac{1}{\sqrt{x}}+\sqrt{x}=\frac{5}{\sqrt{x}}-2\sqrt{x}$</h3>
+                    <div class="equation-box">
+                        <div class="step">
+                            <p class="concept">Ecuación original:</p>
+                            <div class="math-display">
+
+                                $$\frac{1}{\sqrt{x}}+\sqrt{x}=\frac{5}{\sqrt{x}}-2\sqrt{x}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="restriction">Restricción: $x > 0$ (para que $\sqrt{x}$ esté definida en el denominador).</p>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Multiplicar toda la ecuación por $\sqrt{x}$ para eliminar los denominadores.</p>
+                            <div class="math-display">
+
+                                $$\sqrt{x}\left(\frac{1}{\sqrt{x}}+\sqrt{x}\right) = \sqrt{x}\left(\frac{5}{\sqrt{x}}-2\sqrt{x}\right)$$
+
+                                $$1 + (\sqrt{x})^2 = 5 - 2(\sqrt{x})^2$$
+
+                                $$1 + x = 5 - 2x$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Sumar $2x$ a ambos lados.</p>
+                            <div class="math-display">
+
+                                $$1 + x + 2x = 5 - 2x + 2x$$
+
+                                $$1 + 3x = 5$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Restar 1 de ambos lados.</p>
+                            <div class="math-display">
+
+                                $$1 + 3x - 1 = 5 - 1$$
+
+                                $$3x = 4$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Dividir ambos lados por 3.</p>
+                            <div class="math-display">
+
+                                $$\frac{3x}{3} = \frac{4}{3}$$
+
+                                $$x = \frac{4}{3}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Verificar la solución en la restricción.</p>
+                            <p class="verification">$x = \frac{4}{3} > 0$, por lo que la solución es válida.</p>
+                        </div>
+                        <div class="step">
+                            <p class="solution">Solución: $x = \frac{4}{3}$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ecuación 11 -->
+                <div id="equation-11" class="equation-container hidden">
+                    <h3 class="equation-title">Ecuación 11: $\frac{2}{5}+\frac{4}{10x+5}=\frac{7}{2x+1}$</h3>
+                    <div class="equation-box">
+                        <div class="step">
+                            <p class="concept">Ecuación original:</p>
+                            <div class="math-display">
+
+                                $$\frac{2}{5}+\frac{4}{10x+5}=\frac{7}{2x+1}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Factorizar el denominador $10x+5 = 5(2x+1)$.</p>
+                            <div class="math-display">
+
+                                $$\frac{2}{5}+\frac{4}{5(2x+1)}=\frac{7}{2x+1}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="restriction">Restricción: $2x+1 \neq 0 \implies 2x \neq -1 \implies x \neq -\frac{1}{2}$.</p>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Multiplicar toda la ecuación por el mínimo común múltiplo de los denominadores, que es $5(2x+1)$.</p>
+                            <div class="math-display">
+
+                                $$5(2x+1)\left(\frac{2}{5}\right) + 5(2x+1)\left(\frac{4}{5(2x+1)}\right) = 5(2x+1)\left(\frac{7}{2x+1}\right)$$
+
+                                $$(2x+1)(2) + 4 = 5(7)$$
+
+                                $$4x + 2 + 4 = 35$$
+
+                                $$4x + 6 = 35$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Restar 6 de ambos lados.</p>
+                            <div class="math-display">
+
+                                $$4x + 6 - 6 = 35 - 6$$
+
+                                $$4x = 29$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Dividir ambos lados por 4.</p>
+                            <div class="math-display">
+
+                                $$\frac{4x}{4} = \frac{29}{4}$$
+
+                                $$x = \frac{29}{4}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Verificar la solución en la restricción.</p>
+                            <p class="verification">$x = \frac{29}{4} \neq -\frac{1}{2}$, por lo que la solución es válida.</p>
+                        </div>
+                        <div class="step">
+                            <p class="solution">Solución: $x = \frac{29}{4}$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ecuación 12 -->
+                <div id="equation-12" class="equation-container hidden">
+                    <h3 class="equation-title">Ecuación 12: $\frac{3x+1}{6x-2}=\frac{2x+5}{4x-13}$</h3>
+                    <div class="equation-box">
+                        <div class="step">
+                            <p class="concept">Ecuación original:</p>
+                            <div class="math-display">
+
+                                $$\frac{3x+1}{6x-2}=\frac{2x+5}{4x-13}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="restriction">Restricciones: $6x-2 \neq 0 \implies 6x \neq 2 \implies x \neq \frac{1}{3}$. $4x-13 \neq 0 \implies 4x \neq 13 \implies x \neq \frac{13}{4}$.</p>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Multiplicar en cruz (cross-multiplication).</p>
+                            <div class="math-display">
+
+                                $$(3x+1)(4x-13) = (2x+5)(6x-2)$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Expandir ambos lados de la ecuación.</p>
+                            <div class="math-display">
+
+                                $$12x^2 - 39x + 4x - 13 = 12x^2 - 4x + 30x - 10$$
+
+                                $$12x^2 - 35x - 13 = 12x^2 + 26x - 10$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Restar $12x^2$ de ambos lados.</p>
+                            <div class="math-display">
+
+                                $$12x^2 - 35x - 13 - 12x^2 = 12x^2 + 26x - 10 - 12x^2$$
+
+                                $$-35x - 13 = 26x - 10$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Sumar $35x$ a ambos lados.</p>
+                            <div class="math-display">
+
+                                $$-35x - 13 + 35x = 26x - 10 + 35x$$
+
+                                $$-13 = 61x - 10$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Sumar 10 a ambos lados.</p>
+                            <div class="math-display">
+
+                                $$-13 + 10 = 61x - 10 + 10$$
+
+                                $$-3 = 61x$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Dividir ambos lados por 61.</p>
+                            <div class="math-display">
+
+                                $$\frac{-3}{61} = \frac{61x}{61}$$
+
+                                $$-\frac{3}{61} = x$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Verificar la solución en las restricciones.</p>
+                            <p class="verification">$x = -\frac{3}{61}$ es diferente de $\frac{1}{3}$ y $\frac{13}{4}$, por lo que la solución es válida.</p>
+                        </div>
+                        <div class="step">
+                            <p class="solution">Solución: $x = -\frac{3}{61}$</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ecuación 13 -->
+                <div id="equation-13" class="equation-container hidden">
+                    <h3 class="equation-title">Ecuación 13: $\frac{2x-9}{4}=2+\frac{x}{12}$</h3>
+                    <div class="equation-box">
+                        <div class="step">
+                            <p class="concept">Ecuación original:</p>
+                            <div class="math-display">
+
+                                $$\frac{2x-9}{4}=2+\frac{x}{12}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Multiplicar toda la ecuación por el mínimo común múltiplo de los denominadores (que es 12) para eliminar las fracciones.</p>
+                            <div class="math-display">
+
+                                $$12 \times \left(\frac{2x-9}{4}\right) = 12 \times \left(2+\frac{x}{12}\right)$$
+
+                                $$3(2x-9) = 24 + x$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Distribuir en el lado izquierdo.</p>
+                            <div class="math-display">
+
+                                $$6x - 27 = 24 + x$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Restar $x$ de ambos lados.</p>
+                            <div class="math-display">
+
+                                $$6x - 27 - x = 24 + x - x$$
+
+                                $$5x - 27 = 24$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Sumar 27 a ambos lados.</p>
+                            <div class="math-display">
+
+                                $$5x - 27 + 27 = 24 + 27$$
+
+                                $$5x = 51$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="concept">Dividir ambos lados por 5.</p>
+                            <div class="math-display">
+
+                                $$\frac{5x}{5} = \frac{51}{5}$$
+
+                                $$x = \frac{51}{5}$$
+                            </div>
+                        </div>
+                        <div class="step">
+                            <p class="solution">Solución: $x = \frac{51}{5}$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para mostrar la ecuación seleccionada y ocultar las demás
+        function showEquation(num) {
+            // Oculta todas las ecuaciones
+            document.querySelectorAll('.equation-container').forEach(eq => {
+                eq.classList.add('hidden');
+            });
+            
+            // Muestra la ecuación seleccionada
+            document.getElementById(`equation-${num}`).classList.remove('hidden');
+            
+            // Actualiza las clases active
+            document.querySelectorAll('.index-item').forEach((item, index) => {
+                if (index === num - 1) {
+                    item.classList.add('active-equation');
+                } else {
+                    item.classList.remove('active-equation');
+                }
+            });
+            
+            // Asegura que MathJax renderice el contenido
+            if (window.MathJax) {
+                MathJax.typeset();
+            }
+        }
+        
+        // Mostrar la primera ecuación al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            showEquation(1);
+            
+            // Agregar clases para marcar el elemento activo en el índice
+            document.querySelectorAll('.index-item')[0].classList.add('active-equation');
+        });
+    </script>
+</body>
+</html>
